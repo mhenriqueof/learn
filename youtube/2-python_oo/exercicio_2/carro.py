@@ -5,6 +5,8 @@ class Carro:
         self.cor = 'Branco'
         self.modelo = 'Fusion'
         self.velocidade = 0
+        self.velocidade_minima = 0
+        self.velocidade_maxima = 300
         
 
     def ligar(self) -> None:
@@ -18,7 +20,7 @@ class Carro:
             
     def liga_carro(self) -> None:
         self.ligado = True
-        print("Ligando carro...")
+        print("O carro foi ligado.")
             
     def desligar(self) -> None:
         self.verificar_desligado_e_desligar()
@@ -31,26 +33,40 @@ class Carro:
         
     def desliga_carro(self) -> None:
         self.ligado = False
-        print("Desligando carro...")
+        print("O carro foi desligado.")
         
     
-# TODO continuar 
-    def acelera(self) -> None:
-        self.liga_desliga()
-        print(f'Velocidade atual {self.velocidade} Km/h. Acelerando até 80 Km/h.')
-        self.velocidade = 80
+    def acelerar(self) -> None:
+        self.verificar_velocidade_e_acelerar()        
         
-    def desacelera(self) -> None:
-        print(f"Velocidade atual {self.velocidade} Km/h. Desacelerando até parar.")
-        self.velocidade = 0
-        self.liga_desliga()
+    def verificar_velocidade_e_acelerar(self):
+        if self.velocidade < self.velocidade_maxima:
+            self.acelera_carro()
+        else:
+            print(f"Velocidade máxima de {self.velocidade_maxima} Km/h já atingida.")
+    
+    def acelera_carro(self):
+        self.velocidade += 100
+        print(f'Acelerando 10 Km/h. Velocidade atual: {self.velocidade}')
+        
+    def desacelerar(self) -> None:
+        self.verificar_velocidade_e_desacelerar()        
+        
+    def verificar_velocidade_e_desacelerar(self):
+        if self.velocidade > self.velocidade_minima:
+            self.desacelera_carro()
+        else:
+            print(f"Velocidade mínima de {self.velocidade_minima} Km/h já atingida.")
+    
+    def desacelera_carro(self):
+        self.velocidade -= 10
+        print(f'Descelerando 10 Km/h. Velocidade atual: {self.velocidade}')
         
 
 car = Carro()
 
 car.ligar()
-car.ligar()
-car.desligar()
-car.desligar()
-car.desligar()
-car.ligar()
+car.acelerar()
+car.acelerar()
+car.acelerar()
+car.acelerar()

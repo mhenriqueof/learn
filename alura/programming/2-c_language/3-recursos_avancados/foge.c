@@ -2,21 +2,19 @@
 # include <stdlib.h>
 # include "foge.h"
 
-int linhas;
-int colunas;
-char **mapa;
+mapa m;
 
 void free_mapa() {
-    for (int i = 0; i < linhas; i++) {
-        free(mapa[i]);
+    for (int i = 0; i < m.linhas; i++) {
+        free(m.matriz[i]);
     }
-    free(mapa);
+    free(m.matriz);
 }
 
 void aloca_mapa() {
-    mapa = malloc(sizeof(char*) * linhas);
-    for (int i = 0; i < linhas; i++) {
-        mapa[i] = malloc(sizeof(char) * (colunas+1));
+    m.matriz = malloc(sizeof(char*) * m.linhas);
+    for (int i = 0; i < m.linhas; i++) {
+        m.matriz[i] = malloc(sizeof(char) * (m.colunas+1));
     }
 }
 
@@ -28,25 +26,72 @@ void le_mapa() {
         exit(1);
     }
 
-    fscanf(f, "%d %d", &linhas, &colunas);
+    fscanf(f, "%d %d", &m.linhas, &m.colunas);
 
     aloca_mapa();
 
     for (int i = 0; i < 5; i++) {
-        fscanf(f, "%s", mapa[i]);
+        fscanf(f, "%s", m.matriz[i]);
     }
 
     fclose(f);
 }
 
+void imprimemapa() {
+    for (int i = 0; i < 5; i++) {
+        printf("%s\n", m.matriz[i]);
+    }
+}
+
+int acabou() {
+    return 0;
+}
+
+void move(char direcao) {
+
+    int x;
+    int y;
+
+    for (int i = 0; i < m.linhas; i++) {
+        for (int j = 0; j < m.colunas; j++) {
+            if (m.matriz[i][j] == '@') {
+                x = i;
+                y = j;
+            }
+        }
+    }
+
+    switch (direcao) {
+        case 'a':
+            m.matriz[x][y-1] = '@';
+            break;
+        case 'd':
+            m.matriz[x][y+1] = '@';
+            break;
+        case 's':
+            m.matriz[x+1][y] = '@';
+            break;
+        case 'w':
+            m.matriz[x-1][y] = '@';
+        default:
+            printf("Tecla invalida.");    
+    }
+    m.matriz[x][y] = '.';
+}
 
 int main() {
 
     le_mapa();
 
-    for (int i = 0; i < 5; i++) {
-        printf("%s\n", mapa[i]);
-    }
+    do {
+
+        imprimemapa();
+        
+        char comando;
+        scanf(" %c", &comando);
+        move(comando);
+
+    } while (!acabou());
 
     free_mapa();
 
